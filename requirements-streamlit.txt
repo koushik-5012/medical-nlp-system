@@ -1,0 +1,15 @@
+# Include all core requirements
+-r requirements.txt
+
+# Streamlit and UI
+streamlit==1.30.0
+
+# Visualization
+plotly==5.18.0
+matplotlib==3.8.2
+
+# PDF Generation (optional)
+reportlab==4.0.9
+
+# Additional utilities
+Pillow==10.2.0
