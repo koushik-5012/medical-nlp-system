@@ -32,6 +32,7 @@ class ScispaCyNER:
                 print("📥 Downloading en_core_web_sm...")
                 import subprocess
                 import sys
+                subprocess.run([sys.executable, '-m', 'spacy', 'download', 'en_core_web_sm'])
                 result = subprocess.run(
                     [sys.executable, '-m', 'spacy', 'download', 'en_core_web_sm'],
                     capture_output=True,
