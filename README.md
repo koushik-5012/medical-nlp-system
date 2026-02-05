@@ -11,8 +11,7 @@
 ---
 
 ## 🚀 Live Demo
-**[View Live Application →](https://your-app-name.streamlit.io)**
-
+**[View Live Application →](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app/)**
 ---
 
 ## 📋 Table of Contents
@@ -670,7 +669,6 @@ This project is available for educational and demonstration purposes.
 ## 👤 Author
 
 **Koushik**  
-Built with ❤️ for medical NLP applications  
 February 2026
 
 ---
@@ -690,6 +688,4 @@ For questions or feedback, please open an issue on GitHub.
 
 ---
 
-<div align="center">
-  <strong>⭐ Star this repository if you found it helpful!</strong>
-</div>
+
