@@ -1,5 +1,5 @@
 streamlit
-spacy>=3.7.0
+spacy==3.7.4
 scispacy>=0.5.4
 transformers>=4.36.0
 torch>=2.1.0
@@ -8,3 +8,5 @@ plotly>=5.18.0
 Pillow>=10.0.0
 sentencepiece
 protobuf
+
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
