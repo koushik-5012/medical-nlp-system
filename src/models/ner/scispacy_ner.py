@@ -1,56 +1,48 @@
-"""
-Medical NER using scispaCy models.
-
-Author: Koushik
-Date: February 2026
-"""
+"""Medical NER using scispaCy models."""
 
 import spacy
 from typing import Dict, List
 import re
 import warnings
-
 from src.config import MODELS, ENTITY_TYPES, SYMPTOM_KEYWORDS, TREATMENT_KEYWORDS
 
 warnings.filterwarnings('ignore')
 
 
 class ScispaCyNER:
-    """Medical NER using scispaCy models with fallback."""
+    """Medical NER with fallback to general model."""
     
     def __init__(self):
-        """Initialize with fallback to en_core_web_sm."""
-        model = MODELS.get('spacy_medical', 'en_core_sci_md')
+        """Initialize NER with automatic fallback."""
+        self.nlp = None
         
+        # Try medical model first
         try:
-            self.nlp = spacy.load(model)
-            print(f"✅ Loaded medical model: {model}")
-        except OSError:
-            print(f"⚠️ Medical model {model} not found, using general model as fallback")
+            self.nlp = spacy.load('en_core_sci_md')
+            print("✅ Loaded en_core_sci_md")
+        except:
+            pass
+        
+        # Fallback to general model
+        if self.nlp is None:
             try:
                 self.nlp = spacy.load('en_core_web_sm')
-                print("✅ Loaded en_core_web_sm as fallback")
-            except OSError:
+                print("✅ Loaded en_core_web_sm (fallback)")
+            except:
                 print("Downloading en_core_web_sm...")
                 import subprocess
-                subprocess.run(['python', '-m', 'spacy', 'download', 'en_core_web_sm'])
+                subprocess.run(['python', '-m', 'spacy', 'download', 'en_core_web_sm'], check=False)
                 self.nlp = spacy.load('en_core_web_sm')
         
         self.entity_mapping = ENTITY_TYPES
     
     def extract_entities(self, text: str) -> Dict[str, List[str]]:
-        """Extract medical entities from text."""
+        """Extract medical entities."""
         if not text or not text.strip():
             return {'symptoms': [], 'treatments': [], 'diagnoses': [], 'anatomy': []}
         
         doc = self.nlp(text)
-        
-        entities = {
-            'symptoms': [],
-            'treatments': [],
-            'diagnoses': [],
-            'anatomy': []
-        }
+        entities = {'symptoms': [], 'treatments': [], 'diagnoses': [], 'anatomy': []}
         
         for ent in doc.ents:
             category = self._categorize_entity(ent.label_)
@@ -59,22 +51,15 @@ class ScispaCyNER:
         
         entities = self._enhance_with_rules(text, entities)
         entities = self._clean_entities(entities)
-        
         return entities
     
     def extract_with_confidence(self, text: str) -> Dict[str, List[Dict]]:
-        """Extract entities with confidence scores."""
+        """Extract entities with confidence."""
         if not text or not text.strip():
             return {'symptoms': [], 'treatments': [], 'diagnoses': [], 'anatomy': []}
         
         doc = self.nlp(text)
-        
-        entities = {
-            'symptoms': [],
-            'treatments': [],
-            'diagnoses': [],
-            'anatomy': []
-        }
+        entities = {'symptoms': [], 'treatments': [], 'diagnoses': [], 'anatomy': []}
         
         for ent in doc.ents:
             category = self._categorize_entity(ent.label_)
@@ -86,79 +71,68 @@ class ScispaCyNER:
                     'end': ent.end_char,
                     'confidence': 0.85
                 })
-        
         return entities
     
     def _categorize_entity(self, label: str) -> str:
-        """Map spaCy entity labels to categories."""
+        """Map labels to categories."""
         for category, labels in self.entity_mapping.items():
             if label in labels:
                 return category
         return None
     
     def _enhance_with_rules(self, text: str, entities: Dict) -> Dict:
-        """Add rule-based entity extraction."""
+        """Add rule-based extraction."""
         text_lower = text.lower()
         
         for symptom in SYMPTOM_KEYWORDS:
-            pattern = rf'\b{symptom}\b'
-            if re.search(pattern, text_lower):
+            if re.search(rf'\b{symptom}\b', text_lower):
                 entities['symptoms'].append(symptom)
         
         for treatment in TREATMENT_KEYWORDS:
-            pattern = rf'\b{treatment}\b'
-            if re.search(pattern, text_lower):
+            if re.search(rf'\b{treatment}\b', text_lower):
                 entities['treatments'].append(treatment)
         
         return entities
     
     def _clean_entities(self, entities: Dict) -> Dict:
-        """Clean and deduplicate entities."""
+        """Deduplicate entities."""
         cleaned = {}
-        
         for category, entity_list in entities.items():
             seen = set()
             unique = []
-            
             for entity in entity_list:
                 entity_clean = entity.lower().strip()
                 if entity_clean and len(entity_clean) > 2 and entity_clean not in seen:
                     unique.append(entity)
                     seen.add(entity_clean)
-            
             unique.sort(key=len, reverse=True)
             cleaned[category] = unique[:20]
-        
         return cleaned
     
     def extract_diagnosis(self, text: str) -> str:
-        """Extract diagnosis from text."""
+        """Extract diagnosis."""
         patterns = [
             r'diagnosed with\s+([^,.]+)',
             r'diagnosis[:\s]+([^,.]+)',
             r'it was (?:a|an)\s+([^,.]+?)\s+injury',
             r'consistent with\s+([^,.]+)',
         ]
-        
         for pattern in patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 return match.group(1).strip()
-        
         return None
     
     def extract_prognosis(self, text: str) -> str:
-        """Extract prognosis information."""
+        """Extract prognosis."""
         patterns = [
             r'(full recovery.*?)(?:\.|$)',
             r'(expect.*?recovery.*?)(?:\.|$)',
             r"(don't foresee.*?)(?:\.|$)",
             r'(prognosis.*?)(?:\.|$)',
         ]
-        
         for pattern in patterns:
             match = re.search(pattern, text, re.IGNORECASE)
             if match:
                 return match.group(1).strip()
-        
         return None
