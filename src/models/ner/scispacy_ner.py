@@ -16,20 +16,20 @@ warnings.filterwarnings('ignore')
 
 
 class ScispaCyNER:
-    """Medical NER using scispaCy models."""
+    """Medical NER using scispaCy models with fallback."""
     
     def __init__(self):
-        """Initialize with fallback to en_core_web_sm if scispacy unavailable."""
+        """Initialize with fallback to en_core_web_sm."""
         model = MODELS.get('spacy_medical', 'en_core_sci_md')
         
         try:
             self.nlp = spacy.load(model)
             print(f"✅ Loaded medical model: {model}")
         except OSError:
-            print(f"⚠️ Medical model not found, using general model as fallback")
+            print(f"⚠️ Medical model {model} not found, using general model as fallback")
             try:
                 self.nlp = spacy.load('en_core_web_sm')
-                print("✅ Loaded en_core_web_sm")
+                print("✅ Loaded en_core_web_sm as fallback")
             except OSError:
                 print("Downloading en_core_web_sm...")
                 import subprocess
@@ -162,33 +162,3 @@ class ScispaCyNER:
                 return match.group(1).strip()
         
         return None
-
-
-if __name__ == "__main__":
-    """Test NER extraction."""
-    test_text = """
-    Patient reports neck pain and back pain following car accident.
-    Diagnosed with whiplash injury. Received physiotherapy and painkillers.
-    Full recovery expected within six months.
-    """
-    
-    ner = ScispaCyNER()
-    
-    entities = ner.extract_entities(test_text)
-    diagnosis = ner.extract_diagnosis(test_text)
-    prognosis = ner.extract_prognosis(test_text)
-    
-    print("=" * 60)
-    print("NER TEST")
-    print("=" * 60)
-    
-    for category, items in entities.items():
-        if items:
-            print(f"\n{category.upper()}:")
-            for item in items:
-                print(f"   • {item}")
-    
-    print(f"\nDiagnosis: {diagnosis}")
-    print(f"Prognosis: {prognosis}")
-    
-    print("\n✅ NER working!")
