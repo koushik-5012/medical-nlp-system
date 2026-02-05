@@ -16,26 +16,37 @@ class ScispaCyNER:
         """Initialize NER with automatic fallback."""
         self.nlp = None
         
-        # Try medical model first
+        # Try medical model
         try:
             self.nlp = spacy.load('en_core_sci_md')
             print("✅ Loaded en_core_sci_md")
         except:
-            pass
+            print("⚠️ Medical model not available")
         
         # Fallback to general model
         if self.nlp is None:
             try:
                 self.nlp = spacy.load('en_core_web_sm')
-                print("✅ Loaded en_core_web_sm (fallback)")
+                print("✅ Loaded en_core_web_sm")
             except:
-                print("Downloading en_core_web_sm...")
+                print("📥 Downloading en_core_web_sm...")
                 import subprocess
-                subprocess.run(['python', '-m', 'spacy', 'download', 'en_core_web_sm'], check=False)
-                self.nlp = spacy.load('en_core_web_sm')
+                import sys
+                result = subprocess.run(
+                    [sys.executable, '-m', 'spacy', 'download', 'en_core_web_sm'],
+                    capture_output=True,
+                    text=True
+                )
+                print(f"Download result: {result.returncode}")
+                if result.returncode == 0:
+                    import importlib
+                    importlib.invalidate_caches()
+                    self.nlp = spacy.load('en_core_web_sm')
+                    print("✅ Successfully loaded en_core_web_sm after download")
+                else:
+                    raise Exception(f"Failed to download model: {result.stderr}")
         
         self.entity_mapping = ENTITY_TYPES
-    
     def extract_entities(self, text: str) -> Dict[str, List[str]]:
         """Extract medical entities."""
         if not text or not text.strip():
@@ -122,7 +133,7 @@ class ScispaCyNER:
             if match:
                 return match.group(1).strip()
         return None
-    
+     
     def extract_prognosis(self, text: str) -> str:
         """Extract prognosis."""
         patterns = [
