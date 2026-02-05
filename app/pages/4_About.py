@@ -200,7 +200,6 @@ def main():
     st.markdown("---")
     st.markdown("""
         <div style="text-align:center; color:#888; padding:20px;">
-            <p>Built with ❤️ | Medical NLP Analysis System v1.0</p>
             <p style="font-size:0.85em;">Author: Koushik | February 2026</p>
         </div>
     """, unsafe_allow_html=True)
