@@ -11,7 +11,7 @@
 ---
 
 ## 🚀 Live Demo
-**[View Live Application →](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app/)**
+**[View Live Application](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app/)**
 ---
 
 ## 📋 Table of Contents
