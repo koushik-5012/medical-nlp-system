@@ -9,27 +9,33 @@
 
 ---
 
-## 🎯 What It Does ?
+##  What It Does ?
 
 Transform messy medical transcripts into structured clinical insights in seconds:
 
 **Input:** Raw doctor-patient conversation  
 **Output:** Structured entities, sentiment analysis, SOAP notes, and actionable insights
 
----
-
-## 📸 Screenshots
-
-<div align="center">
-  <img src="docs/images/home.png" width="45%" />
-  <img src="docs/images/analysis.png" width="45%" />
-  <img src="docs/images/soap.png" width="45%" />
-  <img src="docs/images/sentiment.png" width="45%" />
-</div>
 
 ---
 
-## ✨ Key Features
+##  Live Application Screenshots
+
+### Home - Upload Interface
+![Home](docs/images/home.png)
+
+### Analysis - Entity Extraction
+![Analysis](docs/images/analysis.png)
+
+### SOAP Note Generation
+![SOAP Note](docs/images/soap.png)
+
+### Sentiment & Intent Analysis
+![Sentiment](docs/images/sentiment.png)
+
+---
+
+## Key Features
 
 | Feature | Technology | Description |
 |---------|-----------|-------------|
@@ -42,7 +48,7 @@ Transform messy medical transcripts into structured clinical insights in seconds
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Try It Live
 **[➡️ Launch Web App](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app)**
@@ -105,11 +111,12 @@ Physician: Yes, with physiotherapy you should recover fully in 6 months.
 **Frontend:** Streamlit • Plotly  
 **Backend:** Python 3.10+
 
-[📚 Detailed Architecture](ARCHITECTURE.md) | [📖 Full Documentation](DOCUMENTATION.md)
+[Detailed Architecture](ARCHITECTURE.md) | 
+[ Documentation](DOCUMENTATION.md)
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 ```
 medical-nlp-system/
 ├── app/                    # Streamlit web interface
@@ -125,7 +132,7 @@ medical-nlp-system/
 
 ---
 
-## 🧪 Testing
+## Testing
 ```bash
 # Run all tests
 pytest tests/ -v
@@ -139,12 +146,12 @@ pytest tests/test_ner.py -v
 
 ---
 
-## 👤 Author
+##  Author
 
 **Koushik**  
 Built for medical NLP applications | February 2026
 
-📧 [GitHub](https://github.com/koushik-s012) • 💼 [Live Demo](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app)
+ [GitHub](https://github.com/koushik-s012) • [Live Demo](https://medical-nlp-system-zrkqy2ub3ymnsnjdaseuwb.streamlit.app)
 
 ---
 
