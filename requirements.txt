@@ -8,5 +8,6 @@ plotly>=5.18.0
 Pillow>=10.0.0
 sentencepiece
 protobuf
-
+#model download link for en_core_web_sm-3.7.1
 https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
+pytest>=7.4.0
